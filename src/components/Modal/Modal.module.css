@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+  background: #1C1C21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 40px;
+}
+
+.number {
+  color: #F2F2F3;
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.text {
+  line-height: 64px;
+  margin-right: auto;
+}
+
+.close_icon {
+  position: absolute;
+  cursor: pointer;
+  top: 60px;
+  right: 40px;
+}
