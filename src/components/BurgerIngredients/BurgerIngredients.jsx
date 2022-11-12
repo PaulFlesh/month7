@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { itemPropTypes } from "../utils/propTypes";
+import { itemPropTypes } from "../../utils/propTypes";
 import burgerIngredientsStyles from "./BurgerIngredients.module.css";
 import {
   Tab,
@@ -11,7 +11,7 @@ import {
   isBun,
   selectBun,
   getTypesList
-} from "../utils/utils";
+} from "../../utils/utils";
 
 function Item({ obj, onIngredientClick }) {
   const [state, setState] = React.useState({
@@ -146,8 +146,8 @@ export default function BurgerIngredients({ extData, handleOpenModal }) {
       </h2>
       <Tabs />
       <div className={`${burgerIngredientsStyles.menu} scrollbar`}>
-        {data.map((sortedArr, index) => (
-          <div key={index} className={`${burgerIngredientsStyles.container} mt-10`}>
+        {data.map((sortedArr, _id) => (
+          <div key={_id} className={`${burgerIngredientsStyles.container} mt-10`}>
             <h3 className={`${burgerIngredientsStyles.container__title} text text_type_main-medium mb-6`}>
               {getTabTitle(sortedArr)}
             </h3>
@@ -161,9 +161,15 @@ export default function BurgerIngredients({ extData, handleOpenModal }) {
 
 Category.propTypes = {
   arr: PropTypes.arrayOf(itemPropTypes).isRequired,
+  handleClick: PropTypes.func
 };
 
 Item.propTypes = {
   obj: itemPropTypes.isRequired,
-  value: PropTypes.object.isRequired
+  onIngredientClick: PropTypes.func
 };
+
+BurgerIngredients.propTypes = {
+  extData: PropTypes.arrayOf(itemPropTypes).isRequired,
+  handleOpenModal: PropTypes.func
+}

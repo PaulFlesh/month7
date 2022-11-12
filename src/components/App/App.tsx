@@ -5,7 +5,7 @@ import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import getDataFromServer from "../utils/api";
+import getDataFromServer from "../../utils/api";
 import Modal from "../Modal/Modal";
 
 export default function App() {

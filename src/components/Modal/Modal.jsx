@@ -51,5 +51,7 @@ export default function Modal({ children, title, handleClose}) {
 }
 
 Modal.propTypes = {
-  title: PropTypes.string
+  children: PropTypes.element,
+  title: PropTypes.string,
+  handleClose: PropTypes.func
 };

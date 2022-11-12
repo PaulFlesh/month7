@@ -6,8 +6,8 @@ import {
   DragIcon,
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { itemPropTypes } from "../utils/propTypes";
-import { isBun, selectBun } from "../utils/utils";
+import { itemPropTypes } from "../../utils/propTypes";
+import { isBun, selectBun } from "../../utils/utils";
 import total_currency from "../../images/total_currency.svg";
 
 function CartItem({ obj, position }) {
@@ -164,3 +164,8 @@ CartItem.propTypes = {
   obj: itemPropTypes.isRequired,
   position: PropTypes.string
 };
+
+BurgerConstructor.propTypes = {
+  extData: PropTypes.arrayOf(itemPropTypes).isRequired,
+  handleOpenModal: PropTypes.func
+}
