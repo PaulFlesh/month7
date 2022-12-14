@@ -1,5 +1,4 @@
 import ingredientDetailsStyles from './IngredientDetails.module.css';
-import { itemPropTypes } from "../../utils/propTypes";
 
 export default function IngredientDetails({ ingredient }) {
   return (
@@ -49,7 +48,3 @@ export default function IngredientDetails({ ingredient }) {
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  ingredient: itemPropTypes
-};

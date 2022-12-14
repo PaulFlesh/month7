@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from 'react-dom';
 import modalStyles from './Modal.module.css';
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
-export default function Modal({ children, title, handleClose}) {
+export default function Modal(props) {
+  const { opened, handleClose } = props;
+
   function closeByEscape(evt) {
-    if(evt.key === "Escape") {
+    if (evt.key === "Escape") {
       handleClose();
     }
   }
 
-  React.useEffect(()=>{
+  useEffect(() => {
     document.addEventListener("keydown", closeByEscape);
     return () => {
       document.removeEventListener("keydown", closeByEscape);
@@ -31,27 +33,27 @@ export default function Modal({ children, title, handleClose}) {
       titleStyle = `${modalStyles.text} text text_type_main-large`;
     }
   }
-  modalStyleSwitch(title);
-
-  return ReactDOM.createPortal(
-    (
-      <ModalOverlay handleClose={handleClose}>
-        <div className={containerStyle} >
-          <div className={titleStyle} >
-            {title}
+  modalStyleSwitch(props.title);
+  
+  if (opened) {
+    return ReactDOM.createPortal(
+      (
+        <ModalOverlay handleClose={handleClose}>
+          <div className={containerStyle} >
+            <div className={titleStyle} >
+              {props.title}
+            </div>
+            <div className={modalStyles.close_icon}>
+              <CloseIcon onClick={handleClose} />
+            </div>
+            {props.children}
           </div>
-          <div className={modalStyles.close_icon}>
-            <CloseIcon onClick={handleClose} />
-          </div>
-          {children}
-        </div>
-      </ModalOverlay>
-    ), document.body
-  )
+        </ModalOverlay>
+      ), document.body
+    )
+  }
 }
 
 Modal.propTypes = {
-  children: PropTypes.element,
-  title: PropTypes.string,
-  handleClose: PropTypes.func
+  title: PropTypes.string
 };

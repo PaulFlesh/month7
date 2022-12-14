@@ -1,0 +1,24 @@
+.counter {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+}
+
+.counter_active {
+  display: block;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.name {
+  margin: 0;
+  text-align: center;
+}
