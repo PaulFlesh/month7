@@ -46,7 +46,7 @@ export function getIds(data) {
 }
 
 
-export function moveIngredient(arr, actionId, targetIndex) {
+export function dragInsideCart(arr, actionId, targetIndex) {
   const deletedItem = arr.find((item) => (item._id === actionId));
   arr.splice(arr.indexOf(deletedItem), 1);
   arr.splice(targetIndex, 0, deletedItem);

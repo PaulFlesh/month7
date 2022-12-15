@@ -6,14 +6,6 @@ import {
   SET_TOTAL_PRICE
 } from "../actions/cart";
 
-import {
-  isBun,
-  addBun,
-  moveIngredient,
-  deleteIngredient,
-  getTotal
-} from "../../components/utils/utils";
-
 const initialState = {
   bun: [],
   ingredients: [],
@@ -25,7 +17,7 @@ export const cartReducer = (state = initialState, action) => {
     case ADD_BUN: {
       return {
         ...state,
-        bun: addBun(action.item, [...state.bun])
+        bun: action.bun
       };
     }
     case ADD_INGREDIENTS: {
@@ -33,7 +25,7 @@ export const cartReducer = (state = initialState, action) => {
         ...state,
         ...state.ingredients.push(
           action.items.find((item) =>
-            item._id === action.id && !isBun(item) ? item : null
+            item._id === action.id ? item : null
           )
         )
       }
@@ -41,23 +33,19 @@ export const cartReducer = (state = initialState, action) => {
     case MOVE_INGREDIENT: {
       return {
         ...state,
-        ingredients: moveIngredient(
-          [...state.ingredients],
-          action.id,
-          action.index
-        ),
+        ingredients: action.ingredients
       };
     }
     case DELETE_INGREDIENT: {
       return {
         ...state,
-        ingredients: deleteIngredient([...state.ingredients], action.id)
+        ingredients: action.key
       }
     }
     case SET_TOTAL_PRICE: {
       return {
         ...state,
-        totalPrice: getTotal(state.bun, state.ingredients)
+        totalPrice: action.totalPrice
       };
     }
     default: {

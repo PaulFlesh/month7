@@ -49,11 +49,16 @@ export default function Modal(props) {
             {props.children}
           </div>
         </ModalOverlay>
-      ), document.body
+      ), document.getElementById('modals')
     )
   }
 }
 
 Modal.propTypes = {
-  title: PropTypes.string
-};
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  opened: PropTypes.bool,
+  handleClose: PropTypes.func
+}

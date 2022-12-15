@@ -1,6 +1,6 @@
 import categoryContainerStyles from "./CategoryContainer.module.css";
 import SingleIngredient from "../SingleIngredient/SingleIngredient";
-import { itemPropTypes } from "../../utils/propTypes";
+import { itemPropTypes } from "../../../utils/propTypes";
 import PropTypes from "prop-types";
 
 export default function CategoryContainer({ sortedIngredients, openIngredientDetails }) {

@@ -4,9 +4,10 @@ import burgerConstructorStyles from "./BurgerConstructor.module.css";
 import { useDrop } from "react-dnd";
 import { ADD_BUN, ADD_INGREDIENTS, SET_TOTAL_PRICE } from "../../services/actions/cart";
 import { getOrderData } from "../../services/actions/order";
-import { isBun, hasBun, getIds } from "../utils/utils";
+import { isBun, hasBun, addBun, getIds, getTotal } from "../../utils/utils";
 import { SET_BUN, INCREASE_COUNTER } from "../../services/actions/menu";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { v4 as uuidv4 } from 'uuid';
 import CartItem from "./CartItem/CartItem";
 import Modal from "../Modal/Modal";
 import OrderDetails from '../OrderDetails/OrderDetails';
@@ -15,6 +16,7 @@ import total_currency from "../../images/total_currency.svg";
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
   const ingredients = useSelector(store => store.menu.items);
+  const ingredientsWithoutBuns = ingredients.filter(item => item.type !== 'bun');
   const constructorList = useSelector(store => store.cart.ingredients);
   const bun = useSelector(store => store.cart.bun);
   const selectedBun = Object.keys(bun).length !== 0;
@@ -26,7 +28,8 @@ export default function BurgerConstructor() {
         dispatch({
           type: ADD_INGREDIENTS,
           id: item._id,
-          items: ingredients
+          items: ingredientsWithoutBuns,
+          //ingredient: {...ingredient, key: uuidv4()}
         });
         dispatch({
           type: INCREASE_COUNTER,
@@ -44,11 +47,12 @@ export default function BurgerConstructor() {
       });
       dispatch({
         type: ADD_BUN,
-        item: item,
+        bun: addBun(item, bun)
       });
     }
     dispatch({
-      type: SET_TOTAL_PRICE
+      type: SET_TOTAL_PRICE,
+      totalPrice: getTotal(bun, constructorList)
     });
   };
 
@@ -61,6 +65,7 @@ export default function BurgerConstructor() {
       <p className={"text text_type_digits-medium mr-2"}>{price.toFixed(0)}</p>
     );
   };
+
   
   const [opened, setOpened] = useState(false);
   const openOrderModal = () => {
@@ -73,9 +78,10 @@ export default function BurgerConstructor() {
     collect: (monitor) => ({
       item: monitor.getItem(),
     }),
-    drop(id) {
-      addItemToCart(id)
-    },
+    drop(ingredient) {
+      addItemToCart(ingredient);
+      ingredient.key = uuidv4()
+    }
   });
 
   if (selectedBun === false) {
@@ -104,7 +110,7 @@ export default function BurgerConstructor() {
                 <CartItem
                   index={index}
                   ingredient={element}
-                  key={`${element._id}-${index}`}
+                  key={element.key}
                 />);
             })}
           </ul>
