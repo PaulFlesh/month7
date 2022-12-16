@@ -4,7 +4,7 @@ import burgerConstructorStyles from "./BurgerConstructor.module.css";
 import { useDrop } from "react-dnd";
 import { ADD_BUN, ADD_INGREDIENTS, SET_TOTAL_PRICE } from "../../services/actions/cart";
 import { getOrderData } from "../../services/actions/order";
-import { isBun, hasBun, addBun, getIds, getTotal } from "../../utils/utils";
+import { isBun, getTotal } from "../../utils/utils";
 import { SET_BUN, INCREASE_COUNTER } from "../../services/actions/menu";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { v4 as uuidv4 } from 'uuid';
@@ -16,20 +16,26 @@ import total_currency from "../../images/total_currency.svg";
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
   const ingredients = useSelector(store => store.menu.items);
-  const ingredientsWithoutBuns = ingredients.filter(item => item.type !== 'bun');
   const constructorList = useSelector(store => store.cart.ingredients);
   const bun = useSelector(store => store.cart.bun);
   const selectedBun = Object.keys(bun).length !== 0;
   const orderNumber = useSelector(store => store.order.order.number);
 
+  function getOrderIds() {
+    const arr = [];
+    const orderArray = constructorList.concat(bun);
+    orderArray.forEach((item) => {
+      arr.push(item._id);
+    });
+    return arr;
+  }
+
   const addItemToCart = (item) => {
     if (!isBun(item)) {
-      if (hasBun(bun)) {
+      if (bun !== undefined) {
         dispatch({
           type: ADD_INGREDIENTS,
-          id: item._id,
-          items: ingredientsWithoutBuns,
-          //ingredient: {...ingredient, key: uuidv4()}
+          item: item
         });
         dispatch({
           type: INCREASE_COUNTER,
@@ -43,11 +49,11 @@ export default function BurgerConstructor() {
       dispatch({
         type: SET_BUN,
         id: item._id,
-        ingredientType: item.type,
+        ingredientType: item.type
       });
       dispatch({
         type: ADD_BUN,
-        bun: addBun(item, bun)
+        bun: item
       });
     }
     dispatch({
@@ -58,18 +64,17 @@ export default function BurgerConstructor() {
 
 
   const TotalPrice = () => {
-    const bunPrice = bun[0].price * 2;
+    const bunPrice = bun.price * 2;
     const ingredientsPrice = constructorList.reduce((acc, item) => acc + item.price, 0);
     const price = bunPrice + ingredientsPrice;
     return (
       <p className={"text text_type_digits-medium mr-2"}>{price.toFixed(0)}</p>
     );
   };
-
   
   const [opened, setOpened] = useState(false);
   const openOrderModal = () => {
-    dispatch(getOrderData(getIds(bun.concat(constructorList))));
+    dispatch(getOrderData(getOrderIds()));
     setOpened(true);
   }
   
@@ -79,8 +84,7 @@ export default function BurgerConstructor() {
       item: monitor.getItem(),
     }),
     drop(ingredient) {
-      addItemToCart(ingredient);
-      ingredient.key = uuidv4()
+      addItemToCart({...ingredient, key: uuidv4()});
     }
   });
 
@@ -95,12 +99,12 @@ export default function BurgerConstructor() {
       <section className={`${burgerConstructorStyles.section} mt-25`} ref={drop}>
         <ul className={burgerConstructorStyles.container}>
           <ConstructorElement
-            key={bun[0]._id}
-            ingredient={bun[0]}
-            text={bun[0].name + ' (верх)'}
-            thumbnail={bun[0].image}
+            key={bun._id}
+            ingredient={bun}
+            text={bun.name + ' (верх)'}
+            thumbnail={bun.image}
             isLocked={true}
-            price={bun[0].price}
+            price={bun.price}
             type='top'
             extraClass="ml-5"
           />
@@ -116,9 +120,9 @@ export default function BurgerConstructor() {
           </ul>
           <div >
             <ConstructorElement
-              text={bun[0].name + ' (низ)'}
-              thumbnail={bun[0].image}
-              price={bun[0].price}
+              text={bun.name + ' (низ)'}
+              thumbnail={bun.image}
+              price={bun.price}
               isLocked={true}
               type="bottom"
               extraClass="ml-5"

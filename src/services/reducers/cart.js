@@ -23,11 +23,7 @@ export const cartReducer = (state = initialState, action) => {
     case ADD_INGREDIENTS: {
       return {
         ...state,
-        ...state.ingredients.push(
-          action.items.find((item) =>
-            item._id === action.id ? item : null
-          )
-        )
+        ...state.ingredients.push(action.item)
       }
     }
     case MOVE_INGREDIENT: {
