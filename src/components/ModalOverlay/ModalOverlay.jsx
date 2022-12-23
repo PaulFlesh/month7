@@ -1,29 +1,33 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import modalOverlay from './ModalOverlay.module.css';
+import modalOverlayStyles from './ModalOverlay.module.css';
+import PropTypes from "prop-types";
 
 export default function ModalOverlay({ children, handleClose }) {
   const ref = React.useRef(null);
+
   React.useEffect(() => {
-    function closeByOutOfFocus(evt) {
-      if (evt.target === ref.current) {
+    ref.current.focus();
+  }, []);
+
+  React.useEffect(() => {
+    function closeByLayover(e) {
+      if (e.target === ref.current) {
         handleClose();
       }
     }
-    document.addEventListener("mousedown", closeByOutOfFocus);
+    document.addEventListener("mousedown", closeByLayover);
     return () => {
-      document.removeEventListener("mousedown", closeByOutOfFocus);
-    }
-  }, []);
-
+      document.removeEventListener("mousedown", closeByLayover);
+    };
+  }, [handleClose]);
+  
   return (
-    <div className={modalOverlay.container} tabIndex={0} ref={ref}>
+    <div className={modalOverlayStyles.container} ref={ref}>
       {children}
     </div>
   );
 }
 
 ModalOverlay.propTypes = {
-  children: PropTypes.element,
-  handleClose: PropTypes.func.isRequired
-};
+  handleClose: PropTypes.func
+}
