@@ -10,7 +10,6 @@ import { getMenu } from "../../services/actions/menu";
 import AppHeader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import IngredientDetailsPage from "../../pages/IngredientDetailsPage/IngredientDetailsPage";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
