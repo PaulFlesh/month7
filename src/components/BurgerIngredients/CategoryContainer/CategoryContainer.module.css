@@ -1,0 +1,25 @@
+.link {
+  text-decoration: none;
+}
+
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  box-sizing: border-box;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.item {
+  width: 272px;
+  height: 208px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border-radius: 40px 16px 40px 40px;
+  transition: box-shadow .7s;
+}
