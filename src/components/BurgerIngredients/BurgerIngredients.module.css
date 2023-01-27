@@ -1,0 +1,31 @@
+.menu {
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.menu::-webkit-scrollbar {
+  width: 8px;
+  background: #2f2f37;
+}
+
+.section {
+  width: 600px;
+  max-height: 800px;
+}
+
+.title {
+
+}
+
+.container {
+
+}
+
+.container__title {
+
+}
+
