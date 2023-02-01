@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import appStyles from "./App.module.css";
@@ -16,11 +16,14 @@ import Register from "../../pages/Register/Register";
 import ForgotPassword from "../../pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "../../pages/ResetPassword/ResetPassword";
 import Profile from "../../pages/Profile/Profile";
+import ProtectedRoute from "../ProtectedRoute";
 import Page404 from "../../pages/Page404/Page404";
 
 export default function App() {
   const dispatch = useDispatch();
   const location = useLocation();
+ 
+  const background = location.state?.background;
 
   useEffect(() => {
     if (getCookie('accessToken')) {
@@ -31,14 +34,12 @@ export default function App() {
   useEffect(() => {
     dispatch(getMenu());
   }, [dispatch]);
-  
-  const isAuthorized = useSelector(store => store.auth.isAuthorized);
 
   return (
     <>
       <AppHeader />
       <main className={appStyles.main}>
-        <Routes>
+        <Routes location={background ?? location}>
           <Route path="/" element={
             <DndProvider backend={HTML5Backend}>
               <BurgerIngredients />
@@ -50,17 +51,11 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/profile" render={({ location })} element={ //ProtectedRoute не актуален, т.к. router 6 разрешает использовать только Route внутри Routes
-            isAuthorized
-              ? (<Profile />)
-              : (<Navigate to={'/login'}
-                state={{ from: location }}
-              />)
-          } />
+          <Route path="/profile" element={<ProtectedRoute children={<Profile />} />} />
           <Route path="/ingredients/:id" element={<IngredientDetailsPage />} />
           <Route path="/*" element={<Page404 />} />
         </Routes>
       </main>
     </>
-  );
+  )
 }

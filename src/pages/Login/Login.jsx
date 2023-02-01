@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Navigate } from 'react-router-dom';
+import React from 'react';
+import { Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import loginStyles from './Login.module.css';
 import { STORE_PASSWORD, login } from '../../services/actions/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import Form from '../../components/Form/Form';
+import { useForm } from '../../hooks/useForm';
 
 export default function Login() {
-  const [loginState, setLoginState] = useState({ email: '', password: '' });
+  const {values, handleChange } = useForm({ email: '', password: '' });
+  const location = useLocation();
   const dispatch = useDispatch();
 
-  function onChange(e) {
-    setLoginState({ ...loginState, [e.target.name]: e.target.value });
-  };
-
-  function onButtonClick(e) {
+  function onSubmit(e) {
     e.preventDefault();
     dispatch({
       type: STORE_PASSWORD,
-      password: loginState.password
+      password: values.password
     });
-    dispatch(login(loginState));
+    dispatch(login(values));
   };
 
   const isAuthorized = useSelector(store => store.auth.isAuthorized);
@@ -27,19 +26,22 @@ export default function Login() {
   return (
     <div className={loginStyles.container}>
       {isAuthorized
-        ? (<Navigate to='/' />)
+        ? (<Navigate to={location?.state?.from || '/'} />)
         : (
-          <div className={loginStyles.content}>
-            <div className={`text text_type_main-medium ${loginStyles.label}`}>Вход</div>
-            <Input type='email' name='email' placeholder='E-mail' value={loginState.email} onChange={onChange} />
-            <PasswordInput name='password' value={loginState.password} onChange={onChange} />
-            <Button htmlType='button' size='medium' type='primary' onClick={onButtonClick}>Войти</Button>
-
+          <>
+            <Form
+              title={'Вход'}
+              buttonText={'Войти'}
+              onSubmit={onSubmit}
+            >
+              <Input type='email' name='email' placeholder='E-mail' value={values.email} onChange={handleChange} />
+              <PasswordInput name='password' value={values.password} onChange={handleChange} />
+            </Form>
             <div className={`text text_type_main-default ${loginStyles.tips}`}>
               <p className={loginStyles.tip}>Вы новый пользователь? <Link className={loginStyles.link} to='/register'>Зарегистрироваться</Link></p>
               <p className={loginStyles.tip}>Забыли пароль? <Link className={loginStyles.link} to='/forgot-password'>Восстановить пароль</Link></p>
             </div>
-          </div>
+          </>
         )
       }
     </div>

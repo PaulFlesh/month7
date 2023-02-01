@@ -4,7 +4,7 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { NavLink, useMatch } from 'react-router-dom';
+import { Link, NavLink, useMatch } from 'react-router-dom';
 import appHeaderStyles from "./AppHeader.module.css";
 import { menuClassifier } from '../../utils/utils';
 
@@ -16,9 +16,7 @@ export default function AppHeader() {
   return (
     <header className={`${appHeaderStyles.header} mt-10`}>
       <nav className={appHeaderStyles.nav}>
-        <div className={appHeaderStyles.logo}>
-          <Logo />
-        </div>
+        <Link className={appHeaderStyles.logo} to='/'><Logo /></Link>
         <ul className={appHeaderStyles.list}>
           <li className={appHeaderStyles.item}>
             <NavLink to='/' className={`${appHeaderStyles.link} pl-5 pr-5 pt-4 pb-4 mt-4 mr-2 mb-4`}>

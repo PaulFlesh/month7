@@ -1,6 +1,5 @@
 import {
   registerUrl,
-  userUrl,
   loginUrl,
   logoutUrl,
   passwordRestoreUrl,
@@ -9,7 +8,7 @@ import {
   refreshTokenLifetime
 } from '../../constants/constants';
 import { getCookie, setCookie, deleteCookie } from '../../utils/utils';
-import { checkResponse } from '../../utils/api';
+import { request, getUserFetch, patchUserFetch } from '../../utils/api';
 
 export const USER_AUTHORIZED = 'USER_AUTHORIZED';
 export const STORE_USER = 'STORE_USER';
@@ -47,45 +46,28 @@ export const RESET_PASS_FAIL = 'RESET_PASS_FAIL';
 export function registerProfile(data) {
   return function (dispatch) {
     dispatch({ type: REGISTER_REQUEST });
-    fetch(registerUrl, {
+    request(registerUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
-      .then(checkResponse)
-      .then(/*data*/() => {
-        dispatch({ type: REGISTER_SUCCESS });
-        /*
-        setCookie(
-          'accessToken',
-          data.accessToken.split('Bearer ')[1],
-          { expires: accessTokenLifetime }
-        );
-        setCookie(
-          'refreshToken',
-          data.refreshToken,
-          { expires: refreshTokenLifetime }
-        )*/
-      })
-      .catch(() => {
-        dispatch({ type: REGISTER_FAIL })
-      })
+      .then(() => dispatch({ type: REGISTER_SUCCESS }))
+      .catch(() => dispatch({ type: REGISTER_FAIL }))
   }
-}
+};
 
 export function login(data) {
   return function (dispatch) {
     dispatch({ type: LOGIN_REQUEST });
-    fetch(loginUrl, {
+    request(loginUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
-      .then(checkResponse)
       .then(data => {
         dispatch({ type: LOGIN_SUCCESS });
         setCookie(
@@ -103,75 +85,54 @@ export function login(data) {
       })
       .catch(() => dispatch({ type: LOGIN_FAIL }))
   }
-}
-
-export async function getUserFetch() {
-  return await fetch(userUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: 'Bearer ' + getCookie('accessToken')
-    }
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error))
 };
 
 export function getUser() {
-  return async function (dispatch) {
+  return function (dispatch) {
     dispatch({ type: GET_USER_REQUEST });
-    const res = await getUserFetch();
-    if (res?.success) {
-      dispatch({ type: GET_USER_SUCCESS });
-      dispatch({ type: STORE_USER, user: res.user });
-      dispatch({ type: USER_AUTHORIZED, isAuthorized: true })
-    } else {
-      dispatch({ type: GET_USER_FAIL })
-    }
+    getUserFetch()
+      .then(res => {
+        if (res?.success) {
+          dispatch({ type: GET_USER_SUCCESS });
+          dispatch({ type: STORE_USER, user: res.user });
+          dispatch({ type: USER_AUTHORIZED, isAuthorized: true })
+        } else {
+          dispatch({ type: GET_USER_FAIL })
+        }
+      })
+      .catch(() => dispatch({ type: GET_USER_FAIL }))
   }
-}
-
-export async function patchUserFetch(data) {
-  return await fetch(userUrl, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: 'Bearer ' + getCookie('accessToken')
-    },
-    body: JSON.stringify(data)
-  })
-    .then(checkResponse)
-    .catch(error => console.log(error))
-}
+};
 
 export function patchUser(data) {
-  return async function (dispatch) {
+  return function (dispatch) {
     dispatch({ type: PATCH_USER_REQUEST });
-    const res = await patchUserFetch(data);
-    if (res?.success) {
-      dispatch({ type: PATCH_USER_SUCCESS });
-      dispatch({
-        type: STORE_USER,
-        user: res.user
+    patchUserFetch(data)
+      .then(res => {
+        if (res?.success) {
+          dispatch({ type: PATCH_USER_SUCCESS });
+          dispatch({
+            type: STORE_USER,
+            user: res.user
+          })
+        } else {
+          dispatch({ type: PATCH_USER_FAIL })
+        }
       })
-    } else {
-      dispatch({ type: PATCH_USER_FAIL })
-    }
+      .catch(() => dispatch({ type: PATCH_USER_FAIL }))
   }
-}
+};
 
 export function logout() {
   return function (dispatch) {
     dispatch({ type: LOGOUT_REQUEST });
-
-    fetch(logoutUrl, {
+    request(logoutUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ token: getCookie('refreshToken') })
     })
-      .then(checkResponse)
       .then(() => {
         dispatch({ type: LOGOUT_SUCCESS });
         deleteCookie('accessToken');
@@ -184,34 +145,34 @@ export function logout() {
       })
       .catch(() => dispatch({ type: LOGOUT_FAIL }))
   }
-}
+};
 
 export function restorePassword(data) {
   return function (dispatch) {
     dispatch({ type: RESTORE_PASS_REQUEST });
-    fetch(passwordRestoreUrl, {
+    request(passwordRestoreUrl, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
-    }).then(checkResponse)
+    })
       .then(() => dispatch({ type: RESTORE_PASS_SUCCESS }))
       .catch(() => dispatch({ type: RESTORE_PASS_FAIL }));
   }
-}
+};
 
 export function resetPassword(data) {
   return function (dispatch) {
     dispatch({ type: RESET_PASS_REQUEST });
-    fetch(passwordResetUrl, {
+    request(passwordResetUrl, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
-    }).then(checkResponse)
+    })
       .then(() => dispatch({ type: RESET_PASS_SUCCESS }))
       .catch(() => dispatch({ type: RESET_PASS_FAIL }));
   }
-}
+};

@@ -1,29 +1,23 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { CLOSE_INGREDIENT_DETAILS } from '../../services/actions/menu';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import styles from './IngredientDetailsPage.module.css';
 import IngredientDetails from '../../components/IngredientDetails/IngredientDetails';
-import Modal from '../../components/Modal/Modal';
 
 export default function IngredientDetailsPage() {
   const { id } = useParams();
   const ingredients = useSelector(store => store.menu.items);
   const ingredient = ingredients.find(item => item._id === id);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  function onClose() {
-    dispatch({type: CLOSE_INGREDIENT_DETAILS});
-    navigate(-1);
-  }
-  
   return (
-    <div>
+    <>
       {ingredient && (
-        <Modal title='Детали ингредиента' onClose={onClose}>
+        <div className={`${styles.container} pt-10 pr-10 pb-15 pl-10`} >
+          <div className={`${styles.text} text text_type_main-large`} >
+            Детали ингредиента
+          </div>
           <IngredientDetails ingredient={ingredient} />
-        </Modal>
+        </div>
       )}
-    </div>
+    </>
   )
 }

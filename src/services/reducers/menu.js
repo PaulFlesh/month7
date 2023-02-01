@@ -68,17 +68,13 @@ export const menuReducer = (state = initialState, action) => {
     case INCREASE_COUNTER: {
       return {
         ...state,
-        ...action.items.find((item) =>
-          item._id === action.id ? (item.count ++) : null
-        )
+        items: action.items
       }
     }
     case DECREASE_COUNTER: {
       return {
         ...state,
-        ...action.items.find((item) =>
-          item._id === action.id ? (item.count --) : null
-        )
+        items: action.items
       }
     }
     default: {

@@ -20,9 +20,9 @@ export default function SingleIngredient({ ingredient }) {
     } else {
       setState({ display: ingredient.count > 0 ? true : false, count: ingredient.count });
     }
-  }, [ingredient, selectedBun]
+  }, [ingredient, ingredient._id, ingredient.count, selectedBun] // eslint-disable-line
   );
-
+  
   const [, dragRef] = useDrag({
     type: 'items',
     item: ingredient,
@@ -35,12 +35,12 @@ export default function SingleIngredient({ ingredient }) {
     <>
       <div ref={dragRef}>
         <div className={
-          ingredient.count > 0
+          state.display
             ? `${singleIngredientStyles.counter} ${singleIngredientStyles.counter_active}`
             : `${singleIngredientStyles.counter}`
         }
         >
-          <Counter count={ingredient.count} size="default" />
+          <Counter count={state.count} size="default" />
         </div>
         <img src={ingredient.image} className={`ml-4 mr-4`} alt={ingredient.name} />
         <div className={`${singleIngredientStyles.price} mt-2 mb-2`}>

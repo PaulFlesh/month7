@@ -1,19 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import profileStyles from './Profile.module.css';
 import { logout, patchUser } from '../../services/actions/auth';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuClassifier } from '../../utils/utils';
+import { useForm } from '../../hooks/useForm';
 
 export default function Profile() {
   const user = useSelector(store => store.auth.user);
-  const [profileState, setProfileState] = useState({ name: user.name, email: user.email, password: '' });
+  const {values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
   const isAuthorized = useSelector(store => store.auth.isAuthorized);
 
-  const isProfileChanged = useMemo(() => user.email !== profileState.email
-    || user.name !== profileState.name,
-    [user, profileState]);
+  const isProfileChanged = useMemo(() => user.email !== values.email
+    || user.name !== values.name, [user, values]
+  );
 
   const buttonClass = useMemo(() =>
     isProfileChanged ? '' : profileStyles.hidden, [isProfileChanged]
@@ -23,18 +24,14 @@ export default function Profile() {
   const ordersLink = useMatch('/profile/orders');
   const dispatch = useDispatch();
 
-  function onChange(e) {
-    setProfileState({ ...profileState, [e.target.name]: e.target.value });
-  };
-
   function saveChanges(e) {
     e.preventDefault();
-    dispatch(patchUser(profileState))
+    dispatch(patchUser(values))
   };
 
   function resetChanges() {
-    setProfileState({
-      ...profileState,
+    setValues({
+      ...values,
       name: user?.name ? user.name : '',
       email: user?.email ? user.email : ''
     })
@@ -46,6 +43,7 @@ export default function Profile() {
 
   const logoutRequest = useSelector(store => store.auth.logoutRequest);
   const logoutSuccess = useSelector(store => store.auth.logoutSuccess);
+
   if (logoutRequest) {
     return (
       <h3 className={`text text_type_main-large mt-10`}>
@@ -53,6 +51,7 @@ export default function Profile() {
       </h3>
     )
   };
+
   if (logoutSuccess) {
     return <Navigate to='/login' />
   };
@@ -76,13 +75,13 @@ export default function Profile() {
             </p>
           </div>
           <div className={profileStyles.auth_fields}>
-            <Input name='name' placeholder='Имя' value={profileState.name} onChange={onChange} />
-            <Input name='email' placeholder='Логин' value={profileState.email} onChange={onChange} />
-            <PasswordInput name='password' value={profileState.password} onChange={onChange} />
+            <Input name='name' placeholder='Имя' value={values.name} onChange={handleChange} />
+            <Input name='email' placeholder='Логин' value={values.email} onChange={handleChange} />
+            <PasswordInput name='password' value={values.password} onChange={handleChange} />
             <div className={`${profileStyles.buttons} ${buttonClass}`}>
               <span onClick={resetChanges}
                 className={`text text_type_main-small ${profileStyles.link}`}>Отмена</span>
-              <Button htmlType='button' size='medium' type='primary' onClick={saveChanges}>Сохранить</Button>
+              <Button htmlType='submit' size='medium' type='primary' onClick={saveChanges}>Сохранить</Button>
             </div>
           </div>
         </div>

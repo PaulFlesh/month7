@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import burgerIngredientsStyles from "./BurgerIngredients.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { OPEN_INGREDIENT_DETAILS, CLOSE_INGREDIENT_DETAILS } from "../../services/actions/menu";
 import { SET_COUNT } from '../../services/actions/menu';
 import Modal from "../Modal/Modal";
@@ -10,8 +10,8 @@ import CategoryContainer from "./CategoryContainer/CategoryContainer";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 
 export default function BurgerIngredients() {
+  //const { id } = useParams(); почему-то не работает, пришлось сделать костыль (стр 45-53)
   const [opened, setOpened] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export default function BurgerIngredients() {
   const buns = allIngredients.filter(item => item.type === 'bun');
   const fills = allIngredients.filter(item => item.type === 'main');
   const sauces = allIngredients.filter(item => item.type === 'sauce');
-  
+
   useEffect(() => {
     dispatch({
       type: SET_COUNT,
@@ -33,7 +33,7 @@ export default function BurgerIngredients() {
       type: OPEN_INGREDIENT_DETAILS,
       ingredient: ingredient
     });
-    setOpened(true);
+    setOpened(true)
   };
 
   function closeIngredientDetails() {
@@ -41,6 +41,16 @@ export default function BurgerIngredients() {
     setOpened(false);
     navigate(-1)
   };
+
+  useEffect(() => {
+    let url = window.location.href;
+    let sections = url.split('/');
+    let lastSection = sections.pop() || sections.pop();
+    const ingredient = allIngredients.find(item => item._id === lastSection);
+    if (ingredient !== undefined) {
+      openIngredientDetails(ingredient)
+    }
+  }, [dispatch, allIngredients]); // eslint-disable-line
 
   const ingredientsScrollRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("one");

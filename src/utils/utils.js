@@ -37,15 +37,26 @@ export function hasBun(arr) {
 }
 
 export function dragInsideCart(arr, actionId, targetIndex) {
-  const deletedItem = arr.find((item) => (item._id === actionId));
-  arr.splice(arr.indexOf(deletedItem), 1);
-  arr.splice(targetIndex, 0, deletedItem);
+  const draggableItem = arr.find((item) => (item._id === actionId));
+  arr.splice(arr.indexOf(draggableItem), 1);
+  arr.splice(targetIndex, 0, draggableItem);
   return arr;
 };
 
-export function deleteIngredient(arr, actionId) {
-  const deletedItem = arr.find((item) => item._id === actionId);
-  arr.splice(arr.indexOf(deletedItem), 1);
+export function deleteIngredient(arr, targetIndex) {
+  arr.splice(targetIndex, 1);
+  return arr;
+};
+
+export function increaseCounter(arr, actionId) {
+  const item = arr.find(item => item._id === actionId);
+  item.count ++;
+  return arr;
+};
+
+export function decreaseCounter(arr, actionId) {
+  const item = arr.find(item => item._id === actionId);
+  item.count --;
   return arr;
 };
 

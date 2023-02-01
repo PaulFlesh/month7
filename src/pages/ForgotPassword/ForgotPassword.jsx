@@ -1,43 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import forgotPasswordStyles from './ForgotPassword.module.css';
 import { restorePassword } from '../../services/actions/auth';
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, Navigate } from 'react-router-dom';
+import { Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Form from '../../components/Form/Form';
+import { useForm } from '../../hooks/useForm';
 
 export default function ForgotPassword() {
-  const [emailState, setEmailState] = useState({ email: '' });
+  const {values, handleChange } = useForm({ email: '' });
+  const location = useLocation();
   const dispatch = useDispatch();
 
-  const onEmailChange = (e) => {
-    setEmailState({ ...emailState, email: e.target.value });
-  };
-
-  const onButtonClick = (e) => {
+  function onSubmit(e) {
     e.preventDefault();
-    dispatch(restorePassword(emailState));
+    dispatch(restorePassword(values));
   };
 
-  const restoreRequest = useSelector(store => store.auth.restoreRequest);
+  const restoreSuccess = useSelector(store => store.auth.restoreSuccess);
   const isAuthorized = useSelector(store => store.auth.isAuthorized);
-  
-  if (restoreRequest) {
+
+  if (restoreSuccess) {
     return <Navigate to='/reset-password' />
   };
 
   return (
     <div className={forgotPasswordStyles.container}>
       {isAuthorized
-        ? (<Navigate to='/' />)
+        ? (<Navigate to={location?.state?.from || '/'} />)
         : (
-          <div className={forgotPasswordStyles.content}>
-            <h3 className={`text text_type_main-medium ${forgotPasswordStyles.title}`}>Восстановление пароля</h3>
-            <Input type='email' placeholder='Укажите e-mail' value={emailState.email} onChange={onEmailChange} />
-            <Button htmlType='button' size='medium' type='primary' onClick={onButtonClick}>Восстановить</Button>
+          <>
+            <Form
+              title={'Восстановление пароля'}
+              buttonText={'Восстановить'}
+              onSubmit={onSubmit}
+            >
+              <Input name='email' type='email' placeholder='Укажите e-mail' value={values.email} onChange={handleChange} />
+            </Form>
             <div className={`text text_type_main-default ${forgotPasswordStyles.tips}`}>
               <p className={forgotPasswordStyles.tip}>Вспомнили пароль? <Link className={forgotPasswordStyles.link} to='/login'>Войти</Link></p>
             </div>
-          </div>
+          </>
         )
       }
     </div>

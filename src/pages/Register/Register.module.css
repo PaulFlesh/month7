@@ -2,13 +2,6 @@
   margin: 180px auto;
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
-
 .tips {
   margin-top: 64px;
   display: flex;

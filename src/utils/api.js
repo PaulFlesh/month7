@@ -1,34 +1,48 @@
 import {
   ingredientsUrl,
-  ordersUrl
+  userUrl
 } from '../constants/constants';
+import { getCookie } from './utils';
 
-export function checkResponse(res) {
+function checkResponse(res) {
   if (res.ok) {
     return res.json();
   } else {
     Promise.reject(`Ошибка: ${res.status}`);
   }
-}
+};
+
+export function request(url, options) {
+  return fetch(url, options).then(checkResponse)
+};
 
 export function getDataFromServer() {
-  return fetch(ingredientsUrl, {
+  return request(ingredientsUrl, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-type': 'application/json'
     }
   })
-    .then(checkResponse);
-}
+};
 
-export function postOrder(ingredients) {
-  return fetch(ordersUrl, {
-    method: 'POST',
+export function getUserFetch() {
+  return request(userUrl, {
+    method: 'GET',
     headers: {
-      authorization: 'eeb10f4c-568d-4124-bc82-28113d2b839d',
-      'Content-type': 'application/json'
+      'Content-Type': 'application/json',
+      authorization: 'Bearer ' + getCookie('accessToken')
+    }
+  })
+};
+
+export function patchUserFetch(data) {
+  return request(userUrl, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: 'Bearer ' + getCookie('accessToken')
     },
-    body: JSON.stringify({ ingredients }),
-  }).then(checkResponse)
-}
+    body: JSON.stringify(data)
+  })
+};

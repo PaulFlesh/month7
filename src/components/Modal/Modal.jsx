@@ -6,7 +6,7 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
 export default function Modal(props) {
-  const { title, onClose } = props;
+  const { title, onClose } = props; // eslint-disable-line
 
   function closeByEscape(evt) {
     if (evt.key === "Escape") {
