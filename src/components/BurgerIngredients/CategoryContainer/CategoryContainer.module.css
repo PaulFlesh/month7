@@ -1,3 +1,7 @@
+.link {
+  text-decoration: none;
+}
+
 .grid {
   list-style: none;
   display: grid;

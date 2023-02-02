@@ -46,5 +46,5 @@ export default function IngredientDetails({ ingredient }) {
         </li>
       </ul>
     </div>
-  );
+  )
 }

@@ -6,19 +6,17 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
 export default function Modal(props) {
-  const { opened, handleClose } = props;
+  const { title, onClose } = props; // eslint-disable-line
 
   function closeByEscape(evt) {
     if (evt.key === "Escape") {
-      handleClose();
+      onClose()
     }
   }
 
   useEffect(() => {
     document.addEventListener("keydown", closeByEscape);
-    return () => {
-      document.removeEventListener("keydown", closeByEscape);
-    }
+    return () => document.removeEventListener("keydown", closeByEscape)
   });
 
   let containerStyle = '';
@@ -34,24 +32,22 @@ export default function Modal(props) {
     }
   }
   modalStyleSwitch(props.title);
-  
-  if (opened) {
-    return ReactDOM.createPortal(
-      (
-        <ModalOverlay handleClose={handleClose}>
-          <div className={containerStyle} >
-            <div className={titleStyle} >
-              {props.title}
-            </div>
-            <div className={modalStyles.close_icon}>
-              <CloseIcon onClick={handleClose} />
-            </div>
-            {props.children}
+
+  return ReactDOM.createPortal(
+    (
+      <ModalOverlay handleClose={onClose}>
+        <div className={containerStyle} >
+          <div className={titleStyle} >
+            {props.title}
           </div>
-        </ModalOverlay>
-      ), document.getElementById('modals')
-    )
-  }
+          <div className={modalStyles.close_icon}>
+            <CloseIcon onClick={onClose} />
+          </div>
+          {props.children}
+        </div>
+      </ModalOverlay>
+    ), document.getElementById('modals')
+  )
 }
 
 Modal.propTypes = {
@@ -59,6 +55,5 @@ Modal.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
-  opened: PropTypes.bool,
-  handleClose: PropTypes.func
+  onClose: PropTypes.func
 }

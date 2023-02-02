@@ -1,13 +1,21 @@
-import { postOrder } from "../../utils/api";
+import { ordersUrl } from '../../constants/constants';
+import { request } from "../../utils/api";
 
 export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
 export const CREATE_ORDER_FAILED = 'CREATE_ORDER_FAILED';
 
-export function getOrderData(data) {
-  return async (dispatch) => {
+export function getOrderData(ingredients) {
+  return function (dispatch) {
     dispatch({ type: CREATE_ORDER_REQUEST });
-    postOrder(data)
+    request(ordersUrl, {
+      method: 'POST',
+      headers: {
+        authorization: 'eeb10f4c-568d-4124-bc82-28113d2b839d',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ ingredients })
+    })
       .then((res) => {
         if (res && res.success) {
           dispatch({
@@ -16,12 +24,9 @@ export function getOrderData(data) {
             order: {
               number: res.order.number
             }
-          });
+          })
         }
       })
-      .catch((err) => {
-        console.log(err);
-        dispatch({ type: CREATE_ORDER_FAILED, err });
-      })
-  };
-}
+      .catch(() => dispatch({ type: CREATE_ORDER_FAILED }))
+  }
+};

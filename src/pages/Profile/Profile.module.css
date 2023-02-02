@@ -1,0 +1,46 @@
+.container {
+  margin: 120px auto;
+  display: flex;
+  gap: 60px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  max-width: 320px;
+  gap: 80px;
+}
+
+.auth_fields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.links a, .links span {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.link {
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.link_profile {
+  text-decoration: none;
+  color: #4C4CFF;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.hidden {
+  visibility: hidden;
+}

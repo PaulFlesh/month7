@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import burgerIngredientsStyles from "./BurgerIngredients.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getMenu } from "../../services/actions/menu";
+import { useNavigate, useParams } from 'react-router-dom';
+import { OPEN_INGREDIENT_DETAILS, CLOSE_INGREDIENT_DETAILS } from "../../services/actions/menu";
 import { SET_COUNT } from '../../services/actions/menu';
 import Modal from "../Modal/Modal";
 import Tabs from "./Tabs/Tabs";
@@ -9,30 +10,47 @@ import CategoryContainer from "./CategoryContainer/CategoryContainer";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 
 export default function BurgerIngredients() {
+  //const { id } = useParams(); почему-то не работает, пришлось сделать костыль (стр 45-53)
+  const [opened, setOpened] = useState(false);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getMenu());
-  }, [dispatch]);
-  
-  const menuItems = useSelector((store) => store.menu.items);
-  useEffect(() => {
-    dispatch({
-      type: SET_COUNT,
-      items: menuItems
-    });
-  }, [dispatch, menuItems]);
+  const navigate = useNavigate();
 
+  const modalIngredient = useSelector(store => store.menu.ingredientDetailsModal);
   const allIngredients = useSelector(store => store.menu.items);
   const buns = allIngredients.filter(item => item.type === 'bun');
   const fills = allIngredients.filter(item => item.type === 'main');
   const sauces = allIngredients.filter(item => item.type === 'sauce');
 
-  const [opened, setOpened] = useState(false);
-  const [details, setDetails] = useState();
+  useEffect(() => {
+    dispatch({
+      type: SET_COUNT,
+      items: allIngredients
+    });
+  }, [dispatch, allIngredients]);
+
   function openIngredientDetails(ingredient) {
-    setOpened(true);
-    setDetails(ingredient);
+    dispatch({
+      type: OPEN_INGREDIENT_DETAILS,
+      ingredient: ingredient
+    });
+    setOpened(true)
   };
+
+  function closeIngredientDetails() {
+    dispatch({ type: CLOSE_INGREDIENT_DETAILS });
+    setOpened(false);
+    navigate(-1)
+  };
+
+  useEffect(() => {
+    let url = window.location.href;
+    let sections = url.split('/');
+    let lastSection = sections.pop() || sections.pop();
+    const ingredient = allIngredients.find(item => item._id === lastSection);
+    if (ingredient !== undefined) {
+      openIngredientDetails(ingredient)
+    }
+  }, [dispatch, allIngredients]); // eslint-disable-line
 
   const ingredientsScrollRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("one");
@@ -95,9 +113,11 @@ export default function BurgerIngredients() {
           <CategoryContainer sortedIngredients={sauces} openIngredientDetails={openIngredientDetails} />
         </div>
       </div>
-      <Modal title="Детали ингредиента" opened={opened} handleClose={() => setOpened(false)}>
-        <IngredientDetails ingredient={details} />
-      </Modal>
+      {opened ?
+        <Modal title="Детали ингредиента" onClose={closeIngredientDetails}>
+          <IngredientDetails ingredient={modalIngredient} />
+        </Modal> : null
+      }
     </section>
   )
 };

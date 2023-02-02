@@ -3,7 +3,8 @@ import {
   ADD_INGREDIENTS,
   MOVE_INGREDIENT,
   DELETE_INGREDIENT,
-  SET_TOTAL_PRICE
+  SET_TOTAL_PRICE,
+  CLEAR_CART
 } from "../actions/cart";
 
 const initialState = {
@@ -35,7 +36,7 @@ export const cartReducer = (state = initialState, action) => {
     case DELETE_INGREDIENT: {
       return {
         ...state,
-        ingredients: action.key
+        ingredients: action.ingredients
       }
     }
     case SET_TOTAL_PRICE: {
@@ -43,6 +44,14 @@ export const cartReducer = (state = initialState, action) => {
         ...state,
         totalPrice: action.totalPrice
       };
+    }
+    case CLEAR_CART: {
+      return {
+        ...state,
+        bun: [],
+        ingredients: [],
+        totalPrice: 0
+      }
     }
     default: {
       return state;

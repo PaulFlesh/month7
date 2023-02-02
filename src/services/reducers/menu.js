@@ -5,6 +5,7 @@ import {
   SET_BUN,
   SET_COUNT,
   OPEN_INGREDIENT_DETAILS,
+  CLOSE_INGREDIENT_DETAILS,
   INCREASE_COUNTER,
   DECREASE_COUNTER
 } from '../actions/menu';
@@ -14,7 +15,7 @@ const initialState = {
   items: [],
   menuRequest: false,
   menuFailed: false,
-  ingredientDetailsModal: {}
+  ingredientDetailsModal: null
 };
 
 export const menuReducer = (state = initialState, action) => {
@@ -58,20 +59,22 @@ export const menuReducer = (state = initialState, action) => {
         ingredientDetailsModal: action.ingredient
       }
     }
+    case CLOSE_INGREDIENT_DETAILS: {
+      return {
+        ...state,
+        ingredientDetailsModal: null
+      }
+    }
     case INCREASE_COUNTER: {
       return {
         ...state,
-        ...action.items.find((item) =>
-          item._id === action.id ? (item.count ++) : null
-        )
+        items: action.items
       }
     }
     case DECREASE_COUNTER: {
       return {
         ...state,
-        ...action.items.find((item) =>
-          item._id === action.id ? (item.count --) : null
-        )
+        items: action.items
       }
     }
     default: {

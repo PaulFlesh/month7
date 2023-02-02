@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import burgerConstructorStyles from "./BurgerConstructor.module.css";
 import { useDrop } from "react-dnd";
-import { ADD_BUN, ADD_INGREDIENTS, SET_TOTAL_PRICE } from "../../services/actions/cart";
+import { ADD_BUN, ADD_INGREDIENTS, SET_TOTAL_PRICE, CLEAR_CART } from "../../services/actions/cart";
 import { getOrderData } from "../../services/actions/order";
-import { isBun, getTotal } from "../../utils/utils";
-import { SET_BUN, INCREASE_COUNTER } from "../../services/actions/menu";
+import { isBun, increaseCounter, getTotal } from "../../utils/utils";
+import { SET_BUN, INCREASE_COUNTER, SET_COUNT } from "../../services/actions/menu";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { v4 as uuidv4 } from 'uuid';
+import { getCookie } from "../../utils/utils";
+import { useNavigate } from 'react-router-dom';
 import CartItem from "./CartItem/CartItem";
 import Modal from "../Modal/Modal";
 import OrderDetails from '../OrderDetails/OrderDetails';
@@ -15,11 +17,14 @@ import total_currency from "../../images/total_currency.svg";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const ingredients = useSelector(store => store.menu.items);
+  const totalPrice = useSelector(store => store.cart.totalPrice);
   const constructorList = useSelector(store => store.cart.ingredients);
   const bun = useSelector(store => store.cart.bun);
   const selectedBun = Object.keys(bun).length !== 0;
   const orderNumber = useSelector(store => store.order.order.number);
+  const isAuthorized = useSelector(store => store.auth.isAuthorized);
 
   function getOrderIds() {
     const arr = [];
@@ -28,19 +33,18 @@ export default function BurgerConstructor() {
       arr.push(item._id);
     });
     return arr;
-  }
+  };
 
-  const addItemToCart = (item) => {
+  function addItemToCart(item) {
     if (!isBun(item)) {
-      if (bun !== undefined) {
+      if (bun.length !== 0) {
         dispatch({
           type: ADD_INGREDIENTS,
           item: item
         });
         dispatch({
           type: INCREASE_COUNTER,
-          id: item._id,
-          items: ingredients
+          items: increaseCounter(ingredients, item._id)
         });
       } else {
         alert("Как же без булок?");
@@ -62,31 +66,32 @@ export default function BurgerConstructor() {
     });
   };
 
-
-  const TotalPrice = () => {
-    const bunPrice = bun.price * 2;
-    const ingredientsPrice = constructorList.reduce((acc, item) => acc + item.price, 0);
-    const price = bunPrice + ingredientsPrice;
-    return (
-      <p className={"text text_type_digits-medium mr-2"}>{price.toFixed(0)}</p>
-    );
-  };
-  
   const [opened, setOpened] = useState(false);
-  const openOrderModal = () => {
-    dispatch(getOrderData(getOrderIds()));
-    setOpened(true);
-  }
-  
+
+  function postOrder() {
+    if (getCookie('accessToken') && isAuthorized) {
+      setOpened(true);
+      dispatch(getOrderData(getOrderIds()));
+    } else {
+      navigate('/login')
+    }
+  };
+
   const [, drop] = useDrop({
     accept: "items",
     collect: (monitor) => ({
       item: monitor.getItem(),
     }),
     drop(ingredient) {
-      addItemToCart({...ingredient, key: uuidv4()});
+      addItemToCart({ ...ingredient, key: uuidv4() });
     }
   });
+
+  function closeOrderDetails() {
+    setOpened(false);
+    dispatch({ type: CLEAR_CART });
+    dispatch({ type: SET_COUNT, items: ingredients })
+  };
 
   if (selectedBun === false) {
     return (
@@ -130,18 +135,18 @@ export default function BurgerConstructor() {
           </div>
         </ul>
         <div className={`mr-4 mt-10 ${burgerConstructorStyles.total}`}>
-          <TotalPrice />
+          <p className="text text_type_digits-medium mr-2">{totalPrice}</p>
           <img className="mr-10 ml-1" src={total_currency} alt="Межгалактические кредиты" />
           <Button htmlType='button'
             type="primary"
             size="large"
-            onClick={openOrderModal}
+            onClick={postOrder}
           >
             Оформить заказ
           </Button>
         </div>
-        {orderNumber && (
-          <Modal title={orderNumber} opened={opened} handleClose={() => setOpened(false)}>
+        {opened && orderNumber && (
+          <Modal title={orderNumber} onClose={closeOrderDetails}>
             <OrderDetails />
           </Modal>
         )}

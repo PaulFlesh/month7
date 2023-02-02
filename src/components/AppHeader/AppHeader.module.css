@@ -15,14 +15,15 @@
   display: flex;
 }
 
-.item {
+.item:last-of-type {
+  margin-left: auto;
+}
+
+.link {
   display: flex;
   align-items: center;
   border-radius: 40px;
-}
-
-.item:last-of-type {
-  margin-left: auto;
+  text-decoration: none;
 }
 
 .logo {
