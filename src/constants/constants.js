@@ -10,3 +10,6 @@ export const passwordResetUrl = apiUrl + "/password-reset/reset";
 
 export const accessTokenLifetime = 1200;
 export const refreshTokenLifetime = 2400;
+
+export const wsAllUrl = "wss://norma.nomoreparties.space/orders/all";
+export const wsProfileOrdersUrl = "wss://norma.nomoreparties.space/orders";

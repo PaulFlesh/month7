@@ -11,6 +11,7 @@ import AppHeader from "../AppHeader/AppHeader";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import IngredientDetailsPage from "../../pages/IngredientDetailsPage/IngredientDetailsPage";
+import Feed from "../../pages/Feed/Feed";
 import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
 import ForgotPassword from "../../pages/ForgotPassword/ForgotPassword";
@@ -18,11 +19,12 @@ import ResetPassword from "../../pages/ResetPassword/ResetPassword";
 import Profile from "../../pages/Profile/Profile";
 import ProtectedRoute from "../ProtectedRoute";
 import Page404 from "../../pages/Page404/Page404";
+import SingleOrderPage from "../../pages/SingleOrderPage/SingleOrderPage";
 
 export default function App() {
   const dispatch = useDispatch();
   const location = useLocation();
- 
+
   const background = location.state?.background;
 
   useEffect(() => {
@@ -46,12 +48,15 @@ export default function App() {
               <BurgerConstructor />
             </DndProvider>
           } />
-          <Route path='/orders' element={<Page404 />} />
+          <Route path='/feed' element={<Feed />} />
+          <Route path="/feed/:id" element={<SingleOrderPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/profile" element={<ProtectedRoute children={<Profile />} />} />
+          <Route path="/profile/orders" element={<ProtectedRoute children={<Profile />} />} />
+          <Route path="/profile/orders/:id" element={<ProtectedRoute children={<SingleOrderPage />} />} />
           <Route path="/ingredients/:id" element={<IngredientDetailsPage />} />
           <Route path="/*" element={<Page404 />} />
         </Routes>

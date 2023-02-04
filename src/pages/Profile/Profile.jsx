@@ -6,6 +6,7 @@ import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { menuClassifier } from '../../utils/utils';
 import { useForm } from '../../hooks/useForm';
+import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 export default function Profile() {
   const user = useSelector(store => store.auth.user);
@@ -46,7 +47,7 @@ export default function Profile() {
 
   if (logoutRequest) {
     return (
-      <h3 className={`text text_type_main-large mt-10`}>
+      <h3 className="text text_type_main-large mt-10">
         Загрузка...
       </h3>
     )
@@ -74,7 +75,8 @@ export default function Profile() {
               изменить свои персональные данные
             </p>
           </div>
-          <div className={profileStyles.auth_fields}>
+          {profileLink && (
+            <div className={profileStyles.auth_fields}>
             <Input name='name' placeholder='Имя' value={values.name} onChange={handleChange} />
             <Input name='email' placeholder='Логин' value={values.email} onChange={handleChange} />
             <PasswordInput name='password' value={values.password} onChange={handleChange} />
@@ -84,6 +86,10 @@ export default function Profile() {
               <Button htmlType='submit' size='medium' type='primary' onClick={saveChanges}>Сохранить</Button>
             </div>
           </div>
+          )}
+          {ordersLink && (
+            <OrderHistory />
+          )}
         </div>
       ) : (
         <Navigate to='/login' />
