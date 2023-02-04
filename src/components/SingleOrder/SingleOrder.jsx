@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import styles from "./SingleOrder.module.css";
 import currency from "../../images/total_currency.svg";
 import PropTypes from "prop-types";
-import { orderStatusSelector, consolidate } from "../../utils/utils";
-import { FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
+import { orderStatusSelector, consolidate, formattedDate } from "../../utils/utils";
 
 export default function SingleOrder({ order, modal }) {
   const menu = useSelector(store => store.menu.items);
@@ -53,7 +52,7 @@ export default function SingleOrder({ order, modal }) {
             <p className={`text text_type_digits-default ${modal && `mt-10 mb-10 ${styles.order_id}`}`}>#{order.number}</p>
             {!modal && (
               <p className="text text_type_main-default text_color_inactive">
-                <FormattedDate date={new Date(order.createdAt)} />
+                {formattedDate(order.createdAt)}
               </p>
             )}
           </div>
@@ -155,7 +154,7 @@ export default function SingleOrder({ order, modal }) {
             <div className={styles.order_footer}>
               {modal && (
                 <p className="text text_type_main-default text_color_inactive">
-                  <FormattedDate date={new Date(order.createdAt)} />
+                  {formattedDate(order.createdAt)}
                 </p>
               )}
               <div className={styles.totalPrice}>
