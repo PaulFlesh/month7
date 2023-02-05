@@ -60,17 +60,17 @@ export default function Feed() {
         </h2>
         <ul className={feedStyles.order_list}>
           {orders &&
-            orders.map((item, index) => {
+            orders.map(item => {
               return (
                 <li className={feedStyles.item}
-                  key={index}
+                  key={item._id}
                   onClick={() => { openDetails(item) }}
                 >
                   <Link to={`/feed/${item._id}`}
                     state={{ background: location }}
                     className={feedStyles.link}
                   >
-                    <SingleOrder order={item} key={index} modal={false} />
+                    <SingleOrder order={item} key={item._id} modal={false} />
                   </Link>
                 </li>
               )

@@ -10,8 +10,7 @@ import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 export default function Profile() {
   const user = useSelector(store => store.auth.user);
-  const {values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
-  const isAuthorized = useSelector(store => store.auth.isAuthorized);
+  const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
 
   const isProfileChanged = useMemo(() => user.email !== values.email
     || user.name !== values.name, [user, values]
@@ -58,42 +57,36 @@ export default function Profile() {
   };
 
   return (
-    <>
-      {isAuthorized ? (
-        <div className={profileStyles.container}>
-          <div className={profileStyles.menu}>
-            <ul className={`text text_type_main-medium ${profileStyles.links}`}>
-              <li className={`text_color_inactive ${profileStyles.link}`}>
-                <Link to='/profile' className={menuClassifier('text', profileLink)}>Профиль</Link>
-              </li>
-              <li className={`text_color_inactive ${profileStyles.link}`}>
-                <Link to='/profile/orders' className={menuClassifier('text', ordersLink)}>История заказов</Link>
-              </li>
-              <li className={`text_color_inactive ${profileStyles.link}`}><span onClick={onLogout}>Выход</span></li>
-            </ul>
-            <p className='text text_type_main-small text_color_inactive'>В этом разделе вы можете
-              изменить свои персональные данные
-            </p>
+    <div className={profileStyles.container}>
+      <div className={profileStyles.menu}>
+        <ul className={`text text_type_main-medium ${profileStyles.links}`}>
+          <li className={`text_color_inactive ${profileStyles.link}`}>
+            <Link to='/profile' className={menuClassifier('text', profileLink)}>Профиль</Link>
+          </li>
+          <li className={`text_color_inactive ${profileStyles.link}`}>
+            <Link to='/profile/orders' className={menuClassifier('text', ordersLink)}>История заказов</Link>
+          </li>
+          <li className={`text_color_inactive ${profileStyles.link}`}><span onClick={onLogout}>Выход</span></li>
+        </ul>
+        <p className='text text_type_main-small text_color_inactive'>В этом разделе вы можете
+          изменить свои персональные данные
+        </p>
+      </div>
+      {profileLink && (
+        <div className={profileStyles.auth_fields}>
+          <Input name='name' placeholder='Имя' value={values.name} onChange={handleChange} />
+          <Input name='email' placeholder='Логин' value={values.email} onChange={handleChange} />
+          <PasswordInput name='password' value={values.password} onChange={handleChange} />
+          <div className={`${profileStyles.buttons} ${buttonClass}`}>
+            <span onClick={resetChanges}
+              className={`text text_type_main-small ${profileStyles.link}`}>Отмена</span>
+            <Button htmlType='submit' size='medium' type='primary' onClick={saveChanges}>Сохранить</Button>
           </div>
-          {profileLink && (
-            <div className={profileStyles.auth_fields}>
-            <Input name='name' placeholder='Имя' value={values.name} onChange={handleChange} />
-            <Input name='email' placeholder='Логин' value={values.email} onChange={handleChange} />
-            <PasswordInput name='password' value={values.password} onChange={handleChange} />
-            <div className={`${profileStyles.buttons} ${buttonClass}`}>
-              <span onClick={resetChanges}
-                className={`text text_type_main-small ${profileStyles.link}`}>Отмена</span>
-              <Button htmlType='submit' size='medium' type='primary' onClick={saveChanges}>Сохранить</Button>
-            </div>
-          </div>
-          )}
-          {ordersLink && (
-            <OrderHistory />
-          )}
         </div>
-      ) : (
-        <Navigate to='/login' />
       )}
-    </>
+      {ordersLink && (
+        <OrderHistory />
+      )}
+    </div>
   )
 }

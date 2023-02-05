@@ -71,8 +71,8 @@ export default function BurgerConstructor() {
   function postOrder(e) {
     e.preventDefault();
     if (getCookie('accessToken') && isAuthorized) {
-      dispatch(getOrderData(getOrderIds()));
       setOpened(true);
+      dispatch(getOrderData(getOrderIds()));
     } else {
       navigate('/login')
     }
@@ -146,8 +146,8 @@ export default function BurgerConstructor() {
             Оформить заказ
           </Button>
         </div>
-        {opened && order && (
-          <Modal title={order.number} onClose={closeOrderDetails}>
+        {opened && (
+          <Modal title={order?.number} onClose={closeOrderDetails}>
             <OrderDetails />
           </Modal>
         )}

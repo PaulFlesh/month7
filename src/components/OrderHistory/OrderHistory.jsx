@@ -25,6 +25,30 @@ export default function OrderHistory() {
     };
   }, [dispatch]);
 
+  function openDetails(item) {
+    dispatch({
+      type: OPEN_DETAILS,
+      order: item
+    });
+    setOpened(true)
+  };
+
+  function closeDetails() {
+    dispatch({ type: CLOSE_DETAILS });
+    setOpened(false);
+    navigate(-1)
+  };
+
+  useEffect(() => {
+    let url = window.location.href;
+    let sections = url.split('/');
+    let lastSection = sections.pop() || sections.pop();
+    const orderId = orders.find(item => item._id === lastSection);
+    if (orderId !== undefined) {
+      openDetails(orderId)
+    }
+  }, [dispatch, orders]); // eslint-disable-line
+
   if (!orders) {
     return (
       <h3 className="text text_type_main-large mt-2">
@@ -41,35 +65,21 @@ export default function OrderHistory() {
     )
   }
 
-  function openDetails(item) {
-    dispatch({
-      type: OPEN_DETAILS,
-      order: item
-    });
-    setOpened(true)
-  };
-
-  function closeDetails() {
-    dispatch({ type: CLOSE_DETAILS });
-    setOpened(false);
-    navigate(-1)
-  };
-
   return (
     <>
       <ul className={orderHistoryStyles.order_list}>
         {orders &&
-          orders.reverse().map((item, index) => {
+          orders.reverse().map(item => {
             return (
               <li className={orderHistoryStyles.item}
-                key={index}
+                key={item._id}
                 onClick={() => { openDetails(item) }}
               >
                 <Link to={`/profile/orders/${item._id}`}
                   state={{ background: location }}
                   className={orderHistoryStyles.link}
                 >
-                  <SingleOrder order={item} key={index} modal={false} />
+                  <SingleOrder order={item} key={item._id} modal={false} />
                 </Link>
               </li>
             )
