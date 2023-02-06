@@ -155,6 +155,7 @@ export const authReducer = (state = initialState, action) => {
     case LOGOUT_SUCCESS: {
       return {
         ...state,
+        isAuthorized: false,
         logoutRequest: false,
 				logoutSuccess: true,
 				logoutFailed: false

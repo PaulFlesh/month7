@@ -9,7 +9,7 @@ import { useForm } from '../../hooks/useForm';
 import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 export default function Profile() {
-  const user = useSelector(store => store.auth.user);
+  const { isAuthorized, user, logoutRequest } = useSelector(store => store.auth);
   const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
 
   const isProfileChanged = useMemo(() => user.email !== values.email
@@ -41,9 +41,6 @@ export default function Profile() {
     dispatch(logout());
   };
 
-  const logoutRequest = useSelector(store => store.auth.logoutRequest);
-  const logoutSuccess = useSelector(store => store.auth.logoutSuccess);
-
   if (logoutRequest) {
     return (
       <h3 className="text text_type_main-large mt-10">
@@ -52,7 +49,7 @@ export default function Profile() {
     )
   };
 
-  if (logoutSuccess) {
+  if (!isAuthorized) {
     return <Navigate to='/login' />
   };
 

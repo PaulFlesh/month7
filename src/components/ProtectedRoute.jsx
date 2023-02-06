@@ -9,8 +9,8 @@ export default function ProtectedRoute({ children, anonymous = false }) {
   if (anonymous && isAuthorized) {
     return <Navigate to={ from } />
   }
-  if (anonymous && !isAuthorized) {
-    return <Navigate to="/login" state={{ from: location}}/>
+  if (!anonymous && !isAuthorized) {
+    return <Navigate to="/login" state={{ from: location }}/>
   }
   return children
 }

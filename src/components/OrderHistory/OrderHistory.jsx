@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
 import SingleOrder from "../../components/SingleOrder/SingleOrder";
 import {
   WS_PROFILE_ORDERS_CONNECTION_START,
@@ -12,11 +12,19 @@ import orderHistoryStyles from "./OrderHistory.module.css";
 import Modal from "../../components/Modal/Modal";
 
 export default function OrderHistory() {
+  const { id } = useParams();
   const [opened, setOpened] = useState(false);
   const { orders, orderModal } = useSelector(store => store.wsProfileOrders);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const orderId = orders.find(item => item._id === id);
+    if (orderId !== undefined) {
+      openDetails(orderId)
+    }
+  }, [dispatch, orders]); // eslint-disable-line
 
   useEffect(() => {
     dispatch({ type: WS_PROFILE_ORDERS_CONNECTION_START });
@@ -39,15 +47,7 @@ export default function OrderHistory() {
     navigate(-1)
   };
 
-  useEffect(() => {
-    let url = window.location.href;
-    let sections = url.split('/');
-    let lastSection = sections.pop() || sections.pop();
-    const orderId = orders.find(item => item._id === lastSection);
-    if (orderId !== undefined) {
-      openDetails(orderId)
-    }
-  }, [dispatch, orders]); // eslint-disable-line
+  
 
   if (!orders) {
     return (
