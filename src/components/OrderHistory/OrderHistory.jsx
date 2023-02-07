@@ -12,19 +12,10 @@ import orderHistoryStyles from "./OrderHistory.module.css";
 import Modal from "../../components/Modal/Modal";
 
 export default function OrderHistory() {
-  const { id } = useParams();
-  const [opened, setOpened] = useState(false);
-  const { orders, orderModal } = useSelector(store => store.wsProfileOrders);
+  //const { id } = useParams(); Слишком быстро отрабатывает, WS не успевает достать нужный заказ из ленты
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const orderId = orders.find(item => item._id === id);
-    if (orderId !== undefined) {
-      openDetails(orderId)
-    }
-  }, [dispatch, orders]); // eslint-disable-line
 
   useEffect(() => {
     dispatch({ type: WS_PROFILE_ORDERS_CONNECTION_START });
@@ -32,6 +23,8 @@ export default function OrderHistory() {
       dispatch({ type: WS_PROFILE_ORDERS_CONNECTION_CLOSED });
     };
   }, [dispatch]);
+
+  const [opened, setOpened] = useState(false);
 
   function openDetails(item) {
     dispatch({
@@ -47,7 +40,18 @@ export default function OrderHistory() {
     navigate(-1)
   };
 
-  
+  const { orders, orderModal } = useSelector(store => store.wsProfileOrders);
+
+  useEffect(() => {
+    let url = window.location.href;
+    let sections = url.split('/');
+    let lastSection = sections.pop() || sections.pop();
+    const orderId = orders.find(item => item._id === lastSection);
+    console.log(orderId);
+    if (orderId !== undefined) {
+      openDetails(orderId)
+    }
+  }, [dispatch, orders]); // eslint-disable-line
 
   if (!orders) {
     return (
@@ -73,12 +77,11 @@ export default function OrderHistory() {
             return (
               <li className={orderHistoryStyles.item}
                 key={item._id}
-                //onClick={() => { openDetails(item) }}
+                onClick={() => { openDetails(item) }}
               >
                 <Link to={`/profile/orders/${item._id}`}
                   state={{ background: location }}
                   className={orderHistoryStyles.link}
-                  target="_blank"
                 >
                   <SingleOrder order={item} key={item._id} modal={false} />
                 </Link>

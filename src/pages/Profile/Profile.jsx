@@ -4,12 +4,13 @@ import { logout, patchUser } from '../../services/actions/auth';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { menuClassifier } from '../../utils/utils';
+import { getCookie, menuClassifier } from '../../utils/utils';
 import { useForm } from '../../hooks/useForm';
 import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 export default function Profile() {
-  const { isAuthorized, user, logoutRequest } = useSelector(store => store.auth);
+  const isAuthorized = getCookie('accessToken');
+  const { user, logoutRequest } = useSelector(store => store.auth);
   const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
 
   const isProfileChanged = useMemo(() => user.email !== values.email

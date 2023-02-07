@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux';
+import { getCookie } from '../utils/utils';
 import { useLocation, Navigate } from 'react-router-dom';
 
 export default function ProtectedRoute({ children, anonymous = false }) {
-  const isAuthorized = useSelector(store => store.auth.isAuthorized);
+  const isAuthorized = getCookie('accessToken');
   const location = useLocation();
   const from = location.state?.from || '/';
   
