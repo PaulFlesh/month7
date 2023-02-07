@@ -73,11 +73,12 @@ export default function OrderHistory() {
             return (
               <li className={orderHistoryStyles.item}
                 key={item._id}
-                onClick={() => { openDetails(item) }}
+                //onClick={() => { openDetails(item) }}
               >
                 <Link to={`/profile/orders/${item._id}`}
                   state={{ background: location }}
                   className={orderHistoryStyles.link}
+                  target="_blank"
                 >
                   <SingleOrder order={item} key={item._id} modal={false} />
                 </Link>
