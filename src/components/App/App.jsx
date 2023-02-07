@@ -25,9 +25,9 @@ export default function App() {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
-
+  
   useEffect(() => {
-    if (getCookie('accessToken')) {
+    if (getCookie('refreshToken') && getCookie('accessToken')) {
       dispatch(getUser());
     }
   }, [dispatch]);
