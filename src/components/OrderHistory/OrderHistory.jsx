@@ -40,16 +40,17 @@ export default function OrderHistory() {
     navigate(-1)
   };
 
-  const { orders, orderModal } = useSelector(store => store.wsProfileOrders);
+  const { wsConnected, orders, orderModal } = useSelector(store => store.wsProfileOrders);
 
   useEffect(() => {
     let url = window.location.href;
     let sections = url.split('/');
     let lastSection = sections.pop() || sections.pop();
-    const orderId = orders.find(item => item._id === lastSection);
-    console.log(orderId);
-    if (orderId !== undefined) {
-      openDetails(orderId)
+    if (wsConnected && orders.length !== 0) {
+      const orderId = orders.find(item => item._id === lastSection);
+      if (orderId !== undefined) {
+        openDetails(orderId)
+      }
     }
   }, [dispatch, orders]); // eslint-disable-line
 
@@ -72,7 +73,7 @@ export default function OrderHistory() {
   return (
     <>
       <ul className={orderHistoryStyles.order_list}>
-        {orders &&
+        {wsConnected && orders &&
           orders.reverse().map(item => {
             return (
               <li className={orderHistoryStyles.item}

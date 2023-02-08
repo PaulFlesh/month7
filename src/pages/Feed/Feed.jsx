@@ -25,7 +25,7 @@ export default function Feed() {
     }
   }, [dispatch]);
 
-  const { orders, total, totalToday, orderModal } = useSelector(store => store.wsFeed);
+  const { wsConnected, orders, total, totalToday, orderModal } = useSelector(store => store.wsFeed);
   const orderStatus = orders ? filterOrderStatus(orders) : null;
 
   function openDetails(item) {
@@ -46,9 +46,11 @@ export default function Feed() {
     let url = window.location.href;
     let sections = url.split('/');
     let lastSection = sections.pop() || sections.pop();
-    const orderId = orders.find(item => item._id === lastSection);
-    if (orderId !== undefined) {
-      openDetails(orderId)
+    if (wsConnected && orders.length !== 0) {
+      const orderId = orders.find(item => item._id === lastSection);
+      if (orderId !== undefined) {
+        openDetails(orderId)
+      }
     }
   }, [dispatch, orders]); // eslint-disable-line
 
@@ -59,7 +61,7 @@ export default function Feed() {
           Лента заказов
         </h2>
         <ul className={feedStyles.order_list}>
-          {orders &&
+          {wsConnected && orders &&
             orders.map(item => {
               return (
                 <li className={feedStyles.item}

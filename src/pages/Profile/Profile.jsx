@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import profileStyles from './Profile.module.css';
 import { logout, patchUser, CLEAR_LOGOUT_STATE } from '../../services/actions/auth';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -11,6 +11,13 @@ import OrderHistory from '../../components/OrderHistory/OrderHistory';
 export default function Profile() {
   const { user, logoutRequest, logoutSuccess } = useSelector(store => store.auth);
   const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
+
+  useEffect(() => {
+    setValues({
+      name: user?.name || '',
+      email: user?.email || ''
+    })
+  }, [user]);
 
   const isProfileChanged = useMemo(() => user.email !== values.email
     || user.name !== values.name, [user, values]
