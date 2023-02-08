@@ -3,6 +3,7 @@ import {
   STORE_USER,
   STORE_PASSWORD,
   CLEAR_USER,
+  CLEAR_LOGOUT_STATE,
   PATCH_USER_REQUEST,
   PATCH_USER_SUCCESS,
   PATCH_USER_FAIL,
@@ -74,6 +75,12 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: {}
+      }
+    }
+    case CLEAR_LOGOUT_STATE: {
+      return {
+        ...state,
+        logoutSuccess: false
       }
     }
     case PATCH_USER_REQUEST: {

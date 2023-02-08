@@ -3,10 +3,9 @@ import { Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-co
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import loginStyles from './Login.module.css';
 import { STORE_PASSWORD, login } from '../../services/actions/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from '../../components/Form/Form';
 import { useForm } from '../../hooks/useForm';
-import { getCookie } from '../../utils/utils';
 
 export default function Login() {
   const {values, handleChange } = useForm({ email: '', password: '' });
@@ -22,7 +21,7 @@ export default function Login() {
     dispatch(login(values));
   };
 
-  const isAuthorized = getCookie('accessToken');
+  const isAuthorized = useSelector(store => store.auth.isAuthorized);
 
   return (
     <div className={loginStyles.container}>

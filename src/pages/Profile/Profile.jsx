@@ -1,16 +1,15 @@
 import React, { useMemo } from 'react';
 import profileStyles from './Profile.module.css';
-import { logout, patchUser } from '../../services/actions/auth';
+import { logout, patchUser, CLEAR_LOGOUT_STATE } from '../../services/actions/auth';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, Navigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookie, menuClassifier } from '../../utils/utils';
+import { menuClassifier } from '../../utils/utils';
 import { useForm } from '../../hooks/useForm';
 import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 export default function Profile() {
-  const isAuthorized = getCookie('accessToken');
-  const { user, logoutRequest } = useSelector(store => store.auth);
+  const { user, logoutRequest, logoutSuccess } = useSelector(store => store.auth);
   const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
 
   const isProfileChanged = useMemo(() => user.email !== values.email
@@ -50,9 +49,10 @@ export default function Profile() {
     )
   };
 
-  if (!isAuthorized) {
+  if (logoutSuccess) {
+    dispatch({ type: CLEAR_LOGOUT_STATE })
     return <Navigate to='/login' />
-  };
+  };  
 
   return (
     <div className={profileStyles.container}>
