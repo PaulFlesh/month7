@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useNavigate, Link, useParams } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import SingleOrder from "../../components/SingleOrder/SingleOrder";
 import {
   WS_PROFILE_ORDERS_CONNECTION_START,
@@ -12,7 +12,6 @@ import orderHistoryStyles from "./OrderHistory.module.css";
 import Modal from "../../components/Modal/Modal";
 
 export default function OrderHistory() {
-  //const { id } = useParams(); Слишком быстро отрабатывает, WS не успевает достать нужный заказ из ленты
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
