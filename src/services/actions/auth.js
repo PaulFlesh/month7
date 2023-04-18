@@ -14,6 +14,7 @@ export const USER_AUTHORIZED = 'USER_AUTHORIZED';
 export const STORE_USER = 'STORE_USER';
 export const STORE_PASSWORD = 'STORE_PASSWORD';
 export const CLEAR_USER = 'CLEAR_USER';
+export const CLEAR_LOGOUT_STATE = 'CLEAR_LOGOUT_STATE';
 
 export const GET_USER_REQUEST = 'GET_USER_REQUEST';
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
@@ -59,7 +60,7 @@ export function registerProfile(data) {
 };
 
 export function login(data) {
-  return function (dispatch) {
+  return async function (dispatch) {
     dispatch({ type: LOGIN_REQUEST });
     request(loginUrl, {
       method: 'POST',
@@ -105,7 +106,7 @@ export function getUser() {
 };
 
 export function patchUser(data) {
-  return function (dispatch) {
+  return async function (dispatch) {
     dispatch({ type: PATCH_USER_REQUEST });
     patchUserFetch(data)
       .then(res => {
@@ -124,7 +125,7 @@ export function patchUser(data) {
 };
 
 export function logout() {
-  return function (dispatch) {
+  return async function (dispatch) {
     dispatch({ type: LOGOUT_REQUEST });
     request(logoutUrl, {
       method: 'POST',
@@ -148,7 +149,7 @@ export function logout() {
 };
 
 export function restorePassword(data) {
-  return function (dispatch) {
+  return async function (dispatch) {
     dispatch({ type: RESTORE_PASS_REQUEST });
     request(passwordRestoreUrl, {
       method: 'POST',
@@ -163,7 +164,7 @@ export function restorePassword(data) {
 };
 
 export function resetPassword(data) {
-  return function (dispatch) {
+  return async function (dispatch) {
     dispatch({ type: RESET_PASS_REQUEST });
     request(passwordResetUrl, {
       method: 'POST',

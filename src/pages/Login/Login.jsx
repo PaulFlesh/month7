@@ -35,7 +35,7 @@ export default function Login() {
               onSubmit={onSubmit}
             >
               <Input type='email' name='email' placeholder='E-mail' value={values.email} onChange={handleChange} />
-              <PasswordInput name='password' value={values.password} onChange={handleChange} />
+              <PasswordInput name='password' autoComplete='string' value={values.password} onChange={handleChange} />
             </Form>
             <div className={`text text_type_main-default ${loginStyles.tips}`}>
               <p className={loginStyles.tip}>Вы новый пользователь? <Link className={loginStyles.link} to='/register'>Зарегистрироваться</Link></p>

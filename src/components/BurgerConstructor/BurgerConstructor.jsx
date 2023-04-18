@@ -23,7 +23,7 @@ export default function BurgerConstructor() {
   const constructorList = useSelector(store => store.cart.ingredients);
   const bun = useSelector(store => store.cart.bun);
   const selectedBun = Object.keys(bun).length !== 0;
-  const orderNumber = useSelector(store => store.order.order.number);
+  const order = useSelector(store => store.order.order);
   const isAuthorized = useSelector(store => store.auth.isAuthorized);
 
   function getOrderIds() {
@@ -68,7 +68,8 @@ export default function BurgerConstructor() {
 
   const [opened, setOpened] = useState(false);
 
-  function postOrder() {
+  function postOrder(e) {
+    e.preventDefault();
     if (getCookie('accessToken') && isAuthorized) {
       setOpened(true);
       dispatch(getOrderData(getOrderIds()));
@@ -145,8 +146,8 @@ export default function BurgerConstructor() {
             Оформить заказ
           </Button>
         </div>
-        {opened && orderNumber && (
-          <Modal title={orderNumber} onClose={closeOrderDetails}>
+        {opened && (
+          <Modal title={order?.number} onClose={closeOrderDetails}>
             <OrderDetails />
           </Modal>
         )}

@@ -1,5 +1,6 @@
 import { ordersUrl } from '../../constants/constants';
-import { request } from "../../utils/api";
+import { request, postOrderFetch } from "../../utils/api";
+import { getCookie } from '../../utils/utils';
 
 export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
@@ -11,8 +12,8 @@ export function getOrderData(ingredients) {
     request(ordersUrl, {
       method: 'POST',
       headers: {
-        authorization: 'eeb10f4c-568d-4124-bc82-28113d2b839d',
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        authorization: "Bearer " + getCookie('accessToken'),
       },
       body: JSON.stringify({ ingredients })
     })

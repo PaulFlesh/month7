@@ -5,9 +5,7 @@ import {
 } from "../actions/order";
 
 const initialState = {
-  order: {
-    number: null,
-  },
+  order: null,
   orderRequest: false,
   orderSuccess: false,
   orderFailed: false
@@ -27,7 +25,6 @@ export const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         order: action.order,
-        name: action.name,
         orderRequest: false,
         orderSuccess: true,
         orderFailed: false

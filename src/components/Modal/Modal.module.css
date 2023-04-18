@@ -1,4 +1,5 @@
 .container {
+  max-width: 640px;
   position: relative;
   background: #1C1C21;
   display: flex;

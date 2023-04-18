@@ -1,6 +1,7 @@
 import {
   ingredientsUrl,
-  userUrl
+  userUrl,
+  ordersUrl
 } from '../constants/constants';
 import { getCookie } from './utils';
 

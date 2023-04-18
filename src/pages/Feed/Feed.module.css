@@ -1,0 +1,85 @@
+.section {
+  width: 600px;
+}
+
+.order_list {
+  width: 592px;
+  max-height: 700px;
+  padding: 0;
+  padding-right: 8px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.order_list::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.order_list::-webkit-scrollbar {
+  width: 8px;
+  background: #2f2f37;
+}
+
+.item {
+  list-style-type: none;
+  max-width: 584px;
+  padding: 24px;
+  border-radius: 40px;
+  background-color: #1c1c21;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.order_board {
+  display: flex;
+  gap: 36px;
+  max-height: 380px;
+}
+
+.status {
+  width: 272px;
+}
+
+.order_numbers {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+  column-gap: 24px;
+  row-gap: 8px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.order_numbers::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.order_numbers::-webkit-scrollbar {
+  height: 8px;
+  background: #2f2f37;
+}
+
+.order_number {
+  color: #00CCCC;
+}
+
+.total {
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25),
+    0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
