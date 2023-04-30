@@ -6,8 +6,8 @@ import { orderStatusSelector, consolidate, formattedDate } from "../../utils/uti
 import { IIngredient, IOrder } from "../../constants/constants";
 
 interface ISingleOrderProps {
-  order: null | IOrder,
-  modal: boolean
+  order: null | IOrder;
+  modal: boolean;
 };
 
 const SingleOrder: FC<ISingleOrderProps> = ({ order, modal }) => {

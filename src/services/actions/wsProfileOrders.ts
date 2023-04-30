@@ -45,6 +45,7 @@ export interface IWsProfileGetMessageAction {
   total: number;
   totalToday: number;
   payload: {
+    success: boolean;
     orders: Array<IOrder>;
     total: number;
     totalToday: number;

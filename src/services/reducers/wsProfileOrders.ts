@@ -6,7 +6,7 @@ import {
   WS_PROFILE_ORDERS_GET_MESSAGE,
   OPEN_DETAILS,
   CLOSE_DETAILS,
-  TWsProfileActions
+  //TWsProfileActions
 } from "../actions/wsProfileOrders";
 
 type TInitialState = {

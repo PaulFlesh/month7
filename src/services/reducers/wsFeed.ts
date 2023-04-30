@@ -15,7 +15,7 @@ type TInitialState = {
   total: number;
   totalToday: number;
   error: null | string;
-  orderModal: null | IOrder
+  orderModal: null | IOrder;
 };
 
 const initialState: TInitialState = {

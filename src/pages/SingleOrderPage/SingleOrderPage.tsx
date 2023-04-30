@@ -35,7 +35,7 @@ const SingleOrderPage = () => {
 
   const allOrders = useSelector(store => store.wsFeed.orders);
   const profileOrders = useSelector(store => store.wsProfileOrders.orders);
-  const order = profileOrders?.find((item: IOrder) => item._id === id) ?? allOrders.find(item => item._id === id);
+  const order = profileOrders.find((item: IOrder) => item._id === id) ?? allOrders.find(item => item._id === id);
 
   return (
     <>
