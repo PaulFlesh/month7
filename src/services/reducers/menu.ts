@@ -5,8 +5,6 @@ import {
   SET_BUN,
   OPEN_INGREDIENT_DETAILS,
   CLOSE_INGREDIENT_DETAILS,
-  INCREASE_COUNTER,
-  DECREASE_COUNTER,
   TMenuActions
 } from '../actions/menu';
 import { IIngredient } from '../../constants/constants';
@@ -65,18 +63,6 @@ export const menuReducer = (state = initialState, action: TMenuActions) => {
       return {
         ...state,
         ingredientDetailsModal: null
-      }
-    }
-    case INCREASE_COUNTER: {
-      return {
-        ...state,
-        items: action.items
-      }
-    }
-    case DECREASE_COUNTER: {
-      return {
-        ...state,
-        items: action.items
       }
     }
     default: {

@@ -64,22 +64,6 @@ export function dragInsideCart(arr: Array<IIngredient>, actionId: string, target
   } else return arr;
 };
 
-export function increaseCounter(arr: Array<IIngredient>, actionId: string): Array<IIngredient> {
-  const item = arr.find(item => item._id === actionId);
-  if (item !== undefined) {
-    item.count++;
-  }
-  return arr;
-};
-
-export function decreaseCounter(arr: Array<IIngredient>, actionId: string): Array<IIngredient> {
-  const item = arr.find(item => item._id === actionId);
-  if (item !== undefined) {
-    item.count--;
-  }
-  return arr;
-};
-
 export function getTotal(bun: IIngredient | null, mains: Array<IIngredient>): number {
   if (bun !== null) {
     const doubledPriceBun: number = bun.price * 2;

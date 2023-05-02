@@ -9,8 +9,7 @@ export const SET_BUN: 'SET_BUN' = 'SET_BUN';
 export const OPEN_INGREDIENT_DETAILS: 'OPEN_INGREDIENT_DETAILS' = 'OPEN_INGREDIENT_DETAILS';
 export const CLOSE_INGREDIENT_DETAILS: 'CLOSE_INGREDIENT_DETAILS' = 'CLOSE_INGREDIENT_DETAILS';
 
-export const INCREASE_COUNTER: 'INCREASE_COUNTER' = 'INCREASE_COUNTER';
-export const DECREASE_COUNTER: 'DECREASE_COUNTER' = 'DECREASE_COUNTER';
+
 
 export interface IGetMenuRequestAction {
   readonly type: typeof GET_INGREDIENTS_REQUEST;
@@ -44,25 +43,13 @@ export interface ICloseDetailsAction {
   ingredientDetailsModal: null;
 };
 
-export interface IIncreaseCounterAction {
-  readonly type: typeof INCREASE_COUNTER;
-  items: Array<IIngredient>;
-};
-
-export interface IDecreaseCounterAction {
-  readonly type: typeof DECREASE_COUNTER;
-  items: Array<IIngredient>;
-};
-
 export type TMenuActions =
   | IGetMenuRequestAction
   | IGetMenuSuccessAction
   | IGetMenuFailedAction
   | ISetBunAction
   | IOpenDetailsAction
-  | ICloseDetailsAction
-  | IIncreaseCounterAction
-  | IDecreaseCounterAction;
+  | ICloseDetailsAction;
 
 type TMenuFetch = {
   success: boolean;

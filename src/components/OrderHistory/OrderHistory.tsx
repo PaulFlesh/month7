@@ -74,7 +74,7 @@ const OrderHistory: FC = () => {
     <>
       <ul className={orderHistoryStyles.order_list}>
         {wsConnected && orders &&
-          orders?.reverse().map((item: IOrder) => {
+          orders?.sort((a: IOrder, b: IOrder) => a.number < b.number ? 1 : -1).map((item: IOrder) => {
             return (
               <li className={orderHistoryStyles.item}
                 key={item._id}

@@ -1,4 +1,4 @@
-import { SyntheticEvent, FC, useMemo } from 'react';
+import { SyntheticEvent, FC, useMemo, useEffect } from 'react';
 import profileStyles from './Profile.module.css';
 import { logout, patchUser, CLEAR_LOGOUT_STATE } from '../../services/actions/auth';
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,7 +10,7 @@ import { useForm } from '../../hooks/useForm';
 import OrderHistory from '../../components/OrderHistory/OrderHistory';
 
 const Profile: FC = () => {
-  const { user, logoutRequest, logoutSuccess } = useSelector(store => store.auth);
+  const { user, password, logoutRequest, logoutSuccess } = useSelector(store => store.auth);
   const { values, setValues, handleChange } = useForm({ name: user.name, email: user.email, password: '' });
 
   const isProfileChanged = useMemo(() => user.email !== values.email
@@ -42,6 +42,16 @@ const Profile: FC = () => {
     dispatch(logout());
   };
 
+  useEffect(() => {
+    if (isProfileChanged) {
+      setValues({
+        ...values,
+        name: user?.name || '',
+        email: user?.email || ''
+      })
+    }
+  }, [isProfileChanged, setValues, values, user, password]);
+
   if (logoutRequest) {
     return (
       <h3 className="text text_type_main-large mt-10">
@@ -53,7 +63,7 @@ const Profile: FC = () => {
   if (logoutSuccess) {
     dispatch({ type: CLEAR_LOGOUT_STATE })
     return <Navigate to='/login' />
-  };  
+  };
 
   return (
     <div className={profileStyles.container}>

@@ -5,8 +5,8 @@ import burgerConstructorStyles from "./BurgerConstructor.module.css";
 import { useDrop } from "react-dnd";
 import { ADD_BUN, ADD_INGREDIENTS, CLEAR_CART } from "../../services/actions/cart";
 import { getOrderData } from "../../services/actions/order";
-import { isBun, increaseCounter, getTotal } from "../../utils/utils";
-import { SET_BUN, INCREASE_COUNTER } from "../../services/actions/menu";
+import { isBun, getTotal } from "../../utils/utils";
+import { SET_BUN } from "../../services/actions/menu";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { v4 as uuidv4 } from 'uuid';
 import { getCookie } from "../../utils/utils";
@@ -20,7 +20,6 @@ import { IIngredient } from "../../constants/constants";
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const ingredients = useSelector(store => store.menu.items);
   const constructorList = useSelector(store => store.cart.ingredients);
   const bun = useSelector(store => store.cart.bun);
   const order = useSelector(store => store.order.order);
@@ -32,11 +31,7 @@ const BurgerConstructor: FC = () => {
         dispatch({
           type: ADD_INGREDIENTS,
           ingredients: constructorList.concat(item)
-        });
-        dispatch({
-          type: INCREASE_COUNTER,
-          items: increaseCounter(ingredients, item._id)
-        });
+        })
       } else {
         alert("Как же без булок?");
       }

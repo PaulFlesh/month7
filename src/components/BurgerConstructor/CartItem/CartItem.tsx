@@ -4,19 +4,17 @@ import { useSelector } from "../../../hooks/useSelector";
 import cartItemStyles from "./CartItem.module.css";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { MOVE_INGREDIENT, DELETE_INGREDIENT } from "../../../services/actions/cart";
-import { dragInsideCart, decreaseCounter } from "../../../utils/utils";
-import { DECREASE_COUNTER } from "../../../services/actions/menu";
+import { dragInsideCart } from "../../../utils/utils";
 import { useDrag, useDrop } from "react-dnd";
 import { IIngredient } from "../../../constants/constants";
 
 interface ICartItemProps {
-  index: number,
-  ingredient: IIngredient
+  index: number;
+  ingredient: IIngredient;
 }
 
 const CartItem: FC<ICartItemProps> = ({ index, ingredient }) => {
   const dispatch = useDispatch();
-  const menuItems = useSelector(store => store.menu.items);
   const constructorList = useSelector(store => store.cart.ingredients);
   const ref = useRef(null);
 
@@ -47,15 +45,11 @@ const CartItem: FC<ICartItemProps> = ({ index, ingredient }) => {
 
   drag(drop(ref));
 
-  const onDelete = (index: number, id: string): void => {
+  const onDelete = (item: IIngredient): void => {
     dispatch({
       type: DELETE_INGREDIENT,
-      item: index
-    });
-    dispatch({
-      type: DECREASE_COUNTER,
-      items: decreaseCounter(menuItems, id)
-    });
+      ingredients: constructorList.filter(ingredient => ingredient.key !== item.key)
+    })
   };
 
   return (
@@ -66,7 +60,7 @@ const CartItem: FC<ICartItemProps> = ({ index, ingredient }) => {
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={() => onDelete(index, ingredient._id)}
+        handleClose={() => onDelete(ingredient)}
       />
     </li>
   );

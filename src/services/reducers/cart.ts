@@ -41,7 +41,7 @@ export const cartReducer = (state = initialState, action: TCartActions) => {
     case DELETE_INGREDIENT: {
       return {
         ...state,
-        ...state.ingredients.splice(action.item, 1)
+        ingredients: action.ingredients
       }
     }
     case CLEAR_CART: {
